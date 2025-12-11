@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MOSINT</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    >
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    >
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    >
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    >
+    <style>
+      :root {
+        --bg: #0a101d;
+        --panel: #0f1b30;
+        --panel-strong: #0b1527;
+        --text: #e9eef7;
+        --muted: #9aa8c6;
+        --accent: #5bd1ff;
+        --accent-2: #8f7dff;
+        --border: rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      }
+
+      body {
+        background: radial-gradient(circle at 20% 20%, rgba(91, 209, 255, 0.08), transparent 25%),
+          radial-gradient(circle at 80% 0%, rgba(143, 125, 255, 0.15), transparent 25%),
+          radial-gradient(circle at 50% 80%, rgba(91, 209, 255, 0.06), transparent 30%),
+          var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .navbar {
+        background: linear-gradient(90deg, rgba(15, 27, 48, 0.8), rgba(15, 27, 48, 0.6));
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        color: var(--text) !important;
+      }
+
+      .navbar .btn {
+        color: var(--text);
+        border-color: var(--border);
+      }
+
+      .content-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1.25rem 3rem;
+      }
+
+      .glass-panel {
+        background: linear-gradient(145deg, rgba(18, 31, 56, 0.75), rgba(11, 21, 39, 0.9));
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.02);
+        border-radius: 14px;
+      }
+
+      .card,
+      .table,
+      .form-control,
+      .form-select {
+        background-color: var(--panel);
+        color: var(--text);
+        border-color: var(--border);
+      }
+
+      .card-title,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: var(--text);
+      }
+
+      .text-muted {
+        color: var(--muted) !important;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        border: none;
+        box-shadow: 0 10px 30px rgba(91, 209, 255, 0.25);
+      }
+
+      .btn-primary:hover {
+        box-shadow: 0 12px 32px rgba(143, 125, 255, 0.35);
+        transform: translateY(-1px);
+      }
+
+      .table tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.02);
+      }
+
+      .alert {
+        border: 1px solid var(--border);
+        background-color: rgba(91, 209, 255, 0.08);
+        color: var(--text);
+      }
+
+      .badge-soft {
+        background: rgba(91, 209, 255, 0.12);
+        color: var(--accent);
+        border: 1px solid var(--border);
+      }
+
+      .nav-pill {
+        border-radius: 100px;
+        padding: 0.45rem 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        color: var(--text);
+      }
+
+      .table thead {
+        color: var(--muted);
+        border-color: var(--border);
+      }
+
+      .table td,
+      .table th {
+        border-color: var(--border);
+      }
+
+      a,
+      a:visited {
+        color: var(--accent);
+      }
+    </style>
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="{{ body_class|default('') }}">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid" style="max-width: 1200px;">
+        <a class="navbar-brand" href="{{ url_for('index') }}">MOSINT</a>
+        <div class="d-flex align-items-center gap-2">
+          <span class="badge badge-soft">Demo research console</span>
+          {% if session.get('is_authenticated') %}
+            <a class="btn btn-outline-light btn-sm" href="{{ url_for('logout') }}">Logout</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <div class="content-wrapper">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="mb-3">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show glass-panel" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+    {% block extra_scripts %}{% endblock %}
+  </body>
+</html>
